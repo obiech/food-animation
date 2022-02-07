@@ -11,26 +11,28 @@ class _AnimatedListWidgetState extends State<AnimatedListWidget> {
   final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
   late ListModel<int> _list;
   int? _selectedItem;
-  late int
-      _nextItem; // The next item inserted when the user presses the '+' button.
+
+  /// The next item inserted when the user presses the '+' button.
+  late int _nextItem;
 
   @override
   void initState() {
     super.initState();
     _list = ListModel<int>(
       listKey: _listKey,
-      initialItems: <int>[0, 1, 2,5,6,7],
+      initialItems: <int>[0, 1, 2, 5, 6, 7],
       removedItemBuilder: _buildRemovedItem,
     );
     _nextItem = 3;
   }
 
   Widget _buildRemovedItem(
-      int item, BuildContext context, Animation<double> animation) {
+      BuildContext context, int item, Animation<double> animation) {
     return CardItem(
       animation: animation,
       item: item,
-      // No gesture detector here: we don't want removed items to be interactive.
+      // No gesture detector here: we don't want removed items to be
+      // interactive.
     );
   }
 
@@ -80,7 +82,7 @@ class _AnimatedListWidgetState extends State<AnimatedListWidget> {
 }
 
 typedef RemovedItemBuilder<T> = Widget Function(
-    T item, BuildContext context, Animation<double> animation);
+    BuildContext context, T item, Animation<double> animation);
 
 class ListModel<E> {
   ListModel({
@@ -106,7 +108,7 @@ class ListModel<E> {
       _animatedList!.removeItem(
         index,
         (BuildContext context, Animation<double> animation) {
-          return removedItemBuilder(removedItem, context, animation);
+          return removedItemBuilder(context, removedItem, animation);
         },
       );
     }
@@ -123,17 +125,17 @@ class ListModel<E> {
 class CardItem extends StatelessWidget {
   const CardItem({
     Key? key,
-    this.onTap,
-    this.selected = false,
-    required this.animation,
     required this.item,
+    required this.animation,
+    this.selected = false,
+    this.onTap,
   })  : assert(item >= 0),
         super(key: key);
 
-  final Animation<double> animation;
-  final VoidCallback? onTap;
   final int item;
   final bool selected;
+  final Animation<double> animation;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
